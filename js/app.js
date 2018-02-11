@@ -26,9 +26,20 @@ function shuffle(array) {
     return array;
 }
 
-// creates the LI for one card, with card<index> as id, and the symbol as content.
+// prepares card id using index and symbol
+function generateId(index, symbol) {
+	return 'card' + index + '_' + symbol;
+}
+
+// extracts symbol from card id
+function getSymbolFromId(id) {
+	var sepIndex = id.indexOf('_');
+	return id.substr(sepIndex + 1);
+}
+
+// creates the LI for one card, with card<index>_<symbol> as id, and the symbol as content.
 function createCard(index, symbol) {
-	return '<li id="card' + index + '" class="card"><span class="fa fa-' + symbol + '"></span></li>';
+	return '<li id="' + generateId(index, symbol) + '" class="card"><span class="fa fa-' + symbol + '"></span></li>';
 }
 
 // generates LI items inside UL with board id.
@@ -43,6 +54,7 @@ function createBoard() {
 
 createBoard();
 
+// variable holding the "first" openedCard
 var openedCard = null;
 
 /*
@@ -60,16 +72,19 @@ function showCard(card) {
 	$('#' + card.id).toggleClass("show open");
 }
 
-// manages choiced card for both span or li events.
-function manageChoice(card) {
+// manages user movement, for both span or li events.
+function manageMovement(card) {
 	showCard(card);
 	if (openedCard == null) {
 		// first clicked card
-		alert("first");
+		//alert("first " + getSymbolFromId(card.id));
 		openedCard = card;
 	} else {
 		// second clicked card
-		alert("second");
+		//alert("second " + getSymbolFromId(card.id) + " " + getSymbolFromId(openedCard.id));
+		if (getSymbolFromId(card.id) === getSymbolFromId(openedCard.id)) {
+			alert("BINGO!!")
+		}
 		openedCard = null;
 	}
 }
@@ -78,11 +93,11 @@ function addListeners() {
 	// it depends on where the user clicks we got the event on the span or the li element.
 	$('#board').on('click', 'span', function(event) {
 		event.stopPropagation();
-		manageChoice(event.target.parentElement);
+		manageMovement(event.target.parentElement);
 	});
 	$('#board').on('click', 'li', function(event) {
 		event.stopPropagation();
-		manageChoice(event.target);
+		manageMovement(event.target);
 	});
 }
 
