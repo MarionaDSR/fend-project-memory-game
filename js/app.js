@@ -54,7 +54,8 @@ function createBoard() {
 
 createBoard();
 
-var STARS_LEVEL = [15, 23, 35, 50];
+// number of movements to hide each star
+var STARS_LEVEL = [2, 4, 6]; // [15, 25, 35];
 var starsNumber = STARS_LEVEL.length;
 
 function createStar(index) {
@@ -122,10 +123,24 @@ function hideCards(card1, card2) {
 	showFailedCard(card2);
 }
 
+function hideStars() {
+	var stars = $('#stars').children();
+	STARS_LEVEL.forEach(function(elem, index, arr) {
+		// for each star, check if it must be hidden
+		if (movesCounter > elem) {
+			var starIndex = STARS_LEVEL.length - index - 1; // to hide from right
+			var starLi = $('#star' + starIndex);
+			var starSpan = starLi.children();
+			starSpan.removeClass("fa-star");
+			starSpan.addClass("fa-star-o");
+		}
+	});
+}
+
 function incrementMoves() {
 	movesCounter += 1;
 	$('#counter').text(movesCounter);
-	// TODO if > x, hide star --> fa-star-o
+	hideStars();
 }
 
 // manages user movement, for both span or li events.
