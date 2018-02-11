@@ -1,7 +1,7 @@
 /*
  * Create a list that holds all of your cards
  */
-var symbols = ["diamond", "paper-plane-o"];//, "anchor", "bolt", "cube", "leaf", "bicycle", "bomb"];
+var symbols = ["diamond", "paper-plane-o", "anchor", "bolt", "cube", "leaf", "bicycle", "bomb"];
 
 
 /*
