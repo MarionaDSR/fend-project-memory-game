@@ -28,8 +28,7 @@ function shuffle(array) {
 
 // creates the LI for one card, with card<index> as id, and the symbol as content.
 function createCard(index, symbol) {
-	console.log("index=" + index + " symbol=" + symbol);
-	return '<li id="card' + index + '" class="card show"><span class="fa fa-' + symbol + '"></span></li>';
+	return '<li id="card' + index + '" class="card"><span class="fa fa-' + symbol + '"></span></li>';
 }
 
 // generates LI items inside UL with board id.
@@ -42,6 +41,8 @@ function createBoard() {
 	});
 }
 
+createBoard();
+
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
@@ -52,5 +53,20 @@ function createBoard() {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
- createBoard();
+function showCard(card) {
+	$('#' + card.id).toggleClass("show");
+}
 
+function addListeners() {
+	// it depends on where the user clicks we got the event on the span or the li element.
+	$('#board').on('click', 'span', function(event) {
+		event.stopPropagation();
+		showCard(event.target.parentElement);
+	});
+	$('#board').on('click', 'li', function(event) {
+		event.stopPropagation();
+		showCard(event.target);
+	});
+}
+
+addListeners();
