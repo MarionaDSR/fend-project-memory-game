@@ -57,6 +57,7 @@ createBoard();
 // variable holding the "first" openedCard
 var openedCard = null;
 var movesCounter = 0;
+var pairsToMatch = symbols.length;
 
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -74,17 +75,41 @@ function showCard(card) {
 }
 
 function showMatchedCard(card) {
+	// remove show and open, add match
 	$('#' + card.id).toggleClass("show open match");
+}
+
+function addMachedPair() {
+	pairsToMatch -= 1;
+	if (pairsToMatch === 0) {
+		alert("END!!!!");
+	}
 }
 
 function lockCards(card1, card2) {
 	showMatchedCard(card1);
 	showMatchedCard(card2);
+	addMachedPair();
+}
+
+// shows failed color, and 1 second later, hides the card
+function showFailedCard(card) {
+	// remove show and open, add failed
+	$('#' + card.id).toggleClass("show open failed");
+	setTimeout(function() {
+		$('#' + card.id).toggleClass("failed");
+	}, 1000);
+}
+
+function hideCards(card1, card2) {
+	showFailedCard(card1);
+	showFailedCard(card2);
 }
 
 function incrementMoves() {
 	movesCounter += 1;
 	$('#counter').text(movesCounter);
+	// TODO if > x, hide star
 }
 
 // manages user movement, for both span or li events.
@@ -100,7 +125,7 @@ function manageMovement(card) {
 			lockCards(card, openedCard);
 		} else {
 			// no matching cards
-
+			hideCards(card, openedCard);
 		}
 		incrementMoves();
 		openedCard = null;

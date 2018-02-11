@@ -81,6 +81,12 @@ h1 {
     font-size: 33px;
 }
 
+.deck .card.failed {
+    cursor: default;
+    background: #ba1416;
+    font-size: 50px;
+}
+
 /*
  * Styles for the Score Panel
  */
