@@ -32,9 +32,9 @@ function generateId(index, symbol) {
 }
 
 // extracts symbol from card id
-function getSymbolFromId(id) {
-	var sepIndex = id.indexOf('_');
-	return id.substr(sepIndex + 1);
+function getSymbolFromId(card) {
+	var sepIndex = card.id.indexOf('_');
+	return card.id.substr(sepIndex + 1);
 }
 
 // creates the LI for one card, with card<index>_<symbol> as id, and the symbol as content.
@@ -56,6 +56,7 @@ createBoard();
 
 // variable holding the "first" openedCard
 var openedCard = null;
+var movesCounter = 0;
 
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -72,19 +73,36 @@ function showCard(card) {
 	$('#' + card.id).toggleClass("show open");
 }
 
+function showMatchedCard(card) {
+	$('#' + card.id).toggleClass("show open match");
+}
+
+function lockCards(card1, card2) {
+	showMatchedCard(card1);
+	showMatchedCard(card2);
+}
+
+function incrementMoves() {
+	movesCounter += 1;
+	$('#counter').text(movesCounter);
+}
+
 // manages user movement, for both span or li events.
 function manageMovement(card) {
 	showCard(card);
 	if (openedCard == null) {
 		// first clicked card
-		//alert("first " + getSymbolFromId(card.id));
 		openedCard = card;
 	} else {
 		// second clicked card
-		//alert("second " + getSymbolFromId(card.id) + " " + getSymbolFromId(openedCard.id));
-		if (getSymbolFromId(card.id) === getSymbolFromId(openedCard.id)) {
-			alert("BINGO!!")
+		if (getSymbolFromId(card) === getSymbolFromId(openedCard)) {
+			// matching cards
+			lockCards(card, openedCard);
+		} else {
+			// no matching cards
+
 		}
+		incrementMoves();
 		openedCard = null;
 	}
 }
