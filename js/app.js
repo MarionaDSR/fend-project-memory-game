@@ -1,6 +1,7 @@
 /*
  * Create a list that holds all of your cards
  */
+var symbols = ["diamond", "paper-plane-o", "anchor", "bolt", "cube", "leaf", "bicycle", "bomb"];
 
 
 /*
@@ -25,6 +26,21 @@ function shuffle(array) {
     return array;
 }
 
+// creates the LI for one card, with card<index> as id, and the symbol as content.
+function createCard(index, symbol) {
+	console.log("index=" + index + " symbol=" + symbol);
+	return '<li id="card' + index + '" class="card show"><span class="fa fa-' + symbol + '"></span></li>';
+}
+
+// generates LI items inside UL with board id.
+function createBoard() {
+	var boardUl = $('#board');
+	var gameSymbols = symbols.concat(symbols);
+	var shuffledSymbols = shuffle(gameSymbols);
+	shuffledSymbols.forEach(function(elem, index, arr) {
+		boardUl.append(createCard(index, elem));
+	});
+}
 
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -36,3 +52,5 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+ createBoard();
+
