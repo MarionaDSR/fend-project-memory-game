@@ -43,6 +43,8 @@ function createBoard() {
 
 createBoard();
 
+var openedCard = null;
+
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
@@ -54,18 +56,33 @@ createBoard();
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 function showCard(card) {
-	$('#' + card.id).toggleClass("show");
+	// class shows makes the icon visible. class open changes background color.
+	$('#' + card.id).toggleClass("show open");
+}
+
+// manages choiced card for both span or li events.
+function manageChoice(card) {
+	showCard(card);
+	if (openedCard == null) {
+		// first clicked card
+		alert("first");
+		openedCard = card;
+	} else {
+		// second clicked card
+		alert("second");
+		openedCard = null;
+	}
 }
 
 function addListeners() {
 	// it depends on where the user clicks we got the event on the span or the li element.
 	$('#board').on('click', 'span', function(event) {
 		event.stopPropagation();
-		showCard(event.target.parentElement);
+		manageChoice(event.target.parentElement);
 	});
 	$('#board').on('click', 'li', function(event) {
 		event.stopPropagation();
-		showCard(event.target);
+		manageChoice(event.target);
 	});
 }
 
