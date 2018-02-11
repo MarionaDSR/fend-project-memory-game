@@ -1,7 +1,7 @@
 /*
  * Create a list that holds all of your cards
  */
-var symbols = ["diamond", "paper-plane-o", "anchor", "bolt", "cube", "leaf", "bicycle", "bomb"];
+var symbols = ["diamond", "paper-plane-o"];//, "anchor", "bolt", "cube", "leaf", "bicycle", "bomb"];
 
 
 /*
@@ -57,6 +57,7 @@ createBoard();
 // number of movements to hide each star
 var STARS_LEVEL = [2, 4, 6]; // [15, 25, 35];
 var starsNumber = STARS_LEVEL.length;
+var visibleStars = starsNumber;
 
 function createStar(index) {
 	return '<li id="star' + index + '"><span class="fa fa-star"></span></li>';
@@ -99,14 +100,20 @@ function showMatchedCard(card) {
 function addMachedPair() {
 	pairsToMatch -= 1;
 	if (pairsToMatch === 0) {
-		alert("Congratulations!!! You have win with " + movesCounter + " movements. You're a " + starsNumber + " star(s) player!!");
+		var starsString = visibleStars + " stars";
+		if (visibleStars === 1) {
+			starsString = visibleStars + " star";
+		}
+		alert("Congratulations!!! You have win with " + movesCounter + " movements. You're a " + starsString + " player!!");
 	}
 }
 
 function lockCards(card1, card2) {
 	showMatchedCard(card1);
 	showMatchedCard(card2);
-	addMachedPair();
+	setTimeout(function() {
+		addMachedPair();
+	}, 300);
 }
 
 // shows failed color, and 1 second later, hides the card
@@ -115,7 +122,7 @@ function showFailedCard(card) {
 	$('#' + card.id).toggleClass("show open failed");
 	setTimeout(function() {
 		$('#' + card.id).toggleClass("failed");
-	}, 1000);
+	}, 500);
 }
 
 function hideCards(card1, card2) {
@@ -125,6 +132,7 @@ function hideCards(card1, card2) {
 
 function hideStars() {
 	var stars = $('#stars').children();
+	visibleStars = starsNumber;
 	STARS_LEVEL.forEach(function(elem, index, arr) {
 		// for each star, check if it must be hidden
 		if (movesCounter > elem) {
@@ -133,6 +141,7 @@ function hideStars() {
 			var starSpan = starLi.children();
 			starSpan.removeClass("fa-star");
 			starSpan.addClass("fa-star-o");
+			visibleStars --;
 		}
 	});
 }
@@ -150,6 +159,7 @@ function manageMovement(card) {
 		// first clicked card
 		openedCard = card;
 	} else {
+		incrementMoves();
 		// second clicked card
 		if (getSymbolFromId(card) === getSymbolFromId(openedCard)) {
 			// matching cards
@@ -158,7 +168,6 @@ function manageMovement(card) {
 			// no matching cards
 			hideCards(card, openedCard);
 		}
-		incrementMoves();
 		openedCard = null;
 	}
 }
