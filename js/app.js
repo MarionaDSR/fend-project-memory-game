@@ -54,6 +54,22 @@ function createBoard() {
 
 createBoard();
 
+var STARS_LEVEL = [15, 23, 35, 50];
+var starsNumber = STARS_LEVEL.length;
+
+function createStar(index) {
+	return '<li id="star' + index + '"><span class="fa fa-star"></span></li>';
+}
+
+function createStars() {
+	var starsUL = $('#stars');
+	for (var i = 0; i < starsNumber; i++) {
+		starsUL.append(createStar(i));
+	}
+}
+
+createStars();
+
 // variable holding the "first" openedCard
 var openedCard = null;
 var movesCounter = 0;
@@ -82,7 +98,7 @@ function showMatchedCard(card) {
 function addMachedPair() {
 	pairsToMatch -= 1;
 	if (pairsToMatch === 0) {
-		alert("END!!!!");
+		alert("Congratulations!!! You have win with " + movesCounter + " movements. You're a " + starsNumber + " star(s) player!!");
 	}
 }
 
@@ -109,7 +125,7 @@ function hideCards(card1, card2) {
 function incrementMoves() {
 	movesCounter += 1;
 	$('#counter').text(movesCounter);
-	// TODO if > x, hide star
+	// TODO if > x, hide star --> fa-star-o
 }
 
 // manages user movement, for both span or li events.
