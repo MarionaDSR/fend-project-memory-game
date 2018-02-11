@@ -55,7 +55,7 @@ function createBoard() {
 createBoard();
 
 // number of movements to hide each star
-var STARS_LEVEL = [2, 4, 6]; // [15, 25, 35];
+var STARS_LEVEL = [15, 25, 35]; // [2, 4, 6];
 var starsNumber = STARS_LEVEL.length;
 var visibleStars = starsNumber;
 
