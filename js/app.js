@@ -3,7 +3,6 @@
  */
 var symbols = ["diamond", "paper-plane-o", "anchor", "bolt", "cube", "leaf", "bicycle", "bomb"];
 
-
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -52,12 +51,16 @@ function createBoard() {
 	});
 }
 
-createBoard();
+function resetBoard() {
+	var boardUl = $('#board');
+	boardUl.empty();
+	createBoard();	
+}
 
 // number of movements to hide each star
 var STARS_LEVEL = [15, 25, 35]; // [2, 4, 6];
 var starsNumber = STARS_LEVEL.length;
-var visibleStars = starsNumber;
+var visibleStars;
 
 function createStar(index) {
 	return '<li id="star' + index + '"><span class="fa fa-star"></span></li>';
@@ -70,12 +73,16 @@ function createStars() {
 	}
 }
 
-createStars();
+function resetStars() {
+	var starsUL = $('#stars');
+	starsUL.empty();
+	createStars();	
+}
 
 // variable holding the "first" openedCard
-var openedCard = null;
-var movesCounter = 0;
-var pairsToMatch = symbols.length;
+var openedCard;
+var movesCounter;
+var pairsToMatch;
 
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -182,6 +189,34 @@ function addListeners() {
 		event.stopPropagation();
 		manageMovement(event.target);
 	});
+	$('.restart').on('click', 'span', function(event) {
+		restartGame();
+	})
 }
 
-addListeners();
+function initCounters() {
+	openedCard = null;
+	movesCounter = 0;
+	pairsToMatch = symbols.length;
+	visibleStars = starsNumber;
+}
+
+function resetCounters() {
+	initCounters();
+	$('#counter').text(movesCounter);
+}
+
+function restartGame() {
+	resetBoard();
+	resetStars();
+	resetCounters();
+}
+
+function initGame() {
+	createBoard();
+	createStars();
+	initCounters();
+	addListeners();
+}
+
+initGame();
