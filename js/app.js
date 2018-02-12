@@ -83,6 +83,7 @@ function resetStars() {
 var openedCard;
 var movesCounter;
 var pairsToMatch;
+var initTime;
 
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -111,7 +112,8 @@ function addMachedPair() {
 		if (visibleStars === 1) {
 			starsString = visibleStars + " star";
 		}
-		alert("Congratulations!!! You have win with " + movesCounter + " movements. You're a " + starsString + " player!!");
+		var formatedTime = formatSeconds(getSeconds());
+		alert("Congratulations!!! You have win with " + movesCounter + " movements in " + formatedTime + ". You're a " + starsString + " player!!");
 	}
 }
 
@@ -194,11 +196,36 @@ function addListeners() {
 	})
 }
 
+// method taken from https://stackoverflow.com/a/17781037
+function formatSeconds(seconds)
+{
+    var date = new Date(1970,0,1);
+    date.setSeconds(seconds);
+    return date.toTimeString().replace(/.*(\d{2}:\d{2}).*/, "$1");
+}
+
+function getSeconds() {
+	var currentTime = new Date().getTime();
+	var seconds = (currentTime - initTime) / 1000;
+	return seconds;	
+}
+
+function updateTimer() {
+	var formatedTime = formatSeconds(getSeconds());
+	$('#timer').text(formatedTime);
+	setTimeout(updateTimer, 1000);
+}
+
+function showTimer() {
+	updateTimer();
+}
+
 function initCounters() {
 	openedCard = null;
 	movesCounter = 0;
 	pairsToMatch = symbols.length;
 	visibleStars = starsNumber;
+	initTime = new Date().getTime();
 }
 
 function resetCounters() {
@@ -217,6 +244,7 @@ function initGame() {
 	createStars();
 	initCounters();
 	addListeners();
+	showTimer();
 }
 
 initGame();
