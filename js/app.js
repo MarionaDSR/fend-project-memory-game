@@ -113,7 +113,10 @@ function addMachedPair() {
 			starsString = visibleStars + " star";
 		}
 		var formatedTime = formatSeconds(getSeconds());
-		alert("Congratulations!!! You have win with " + movesCounter + " movements in " + formatedTime + ". You're a " + starsString + " player!!");
+		if (confirm("Congratulations!!! You have win with " + movesCounter + " movements in " + formatedTime + ". You're a " + starsString + " player!!" + 
+			"\nDo you want to play again?")) {
+			restartGame();
+		}
 	}
 }
 
