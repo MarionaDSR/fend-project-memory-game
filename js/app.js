@@ -51,6 +51,7 @@ function createBoard() {
 	});
 }
 
+// resets the board, emptying existing LI and creating the new ones.
 function resetBoard() {
 	var boardUl = $('#board');
 	boardUl.empty();
@@ -62,10 +63,12 @@ var STARS_LEVEL = [15, 25, 35]; // [2, 4, 6];
 var starsNumber = STARS_LEVEL.length;
 var visibleStars;
 
+// creates the LI for one star
 function createStar(index) {
 	return '<li id="star' + index + '"><span class="fa fa-star"></span></li>';
 }
 
+// generates LI items inside UL with stars id.
 function createStars() {
 	var starsUL = $('#stars');
 	for (var i = 0; i < starsNumber; i++) {
@@ -73,19 +76,19 @@ function createStars() {
 	}
 }
 
+// resets the stars, emptying existing LI and creating the new ones.
 function resetStars() {
 	var starsUL = $('#stars');
 	starsUL.empty();
 	createStars();	
 }
 
-// variable holding the "first" openedCard
-var openedCard;
+var openedCard; // variable holding the "first" openedCard to be able to compare it with the second one
 var movesCounter;
 var pairsToMatch;
-var initTime;
+var initTime; // to see the lapse of time
 
-var timerTimeOut;
+var timerTimeOut; // to be able to stop timer
 
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -97,16 +100,20 @@ var timerTimeOut;
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+
+ // makes a card visible
 function showCard(card) {
 	// class shows makes the icon visible. class open changes background color.
 	$('#' + card.id).toggleClass("show open");
 }
 
+// keeps a card visible after matching
 function showMatchedCard(card) {
 	// remove show and open, add match
 	$('#' + card.id).toggleClass("show open match");
 }
 
+// decreases the number of pairs to match. If game done, tells user
 function addMachedPair() {
 	pairsToMatch -= 1;
 	if (pairsToMatch === 0) {
@@ -124,6 +131,7 @@ function addMachedPair() {
 	}
 }
 
+// shows matched cards and does necessary business to control the end of the game
 function lockCards(card1, card2) {
 	showMatchedCard(card1);
 	showMatchedCard(card2);
@@ -132,7 +140,7 @@ function lockCards(card1, card2) {
 	}, 300);
 }
 
-// shows failed color, and 1 second later, hides the card
+// shows failed color, and half a second later, hides the card
 function showFailedCard(card) {
 	// remove show and open, add failed
 	$('#' + card.id).toggleClass("show open failed");
@@ -141,11 +149,13 @@ function showFailedCard(card) {
 	}, 500);
 }
 
+// hides the two cards
 function hideCards(card1, card2) {
 	showFailedCard(card1);
 	showFailedCard(card2);
 }
 
+// checks if the number of movements requires to hide an star, and hides it
 function hideStars() {
 	var stars = $('#stars').children();
 	visibleStars = starsNumber;
@@ -162,6 +172,7 @@ function hideStars() {
 	});
 }
 
+// increments movement counter, updates UI: number of movements and stars
 function incrementMoves() {
 	movesCounter += 1;
 	$('#counter').text(movesCounter);
@@ -188,6 +199,7 @@ function manageMovement(card) {
 	}
 }
 
+// adds listeners for cards and reset button
 function addListeners() {
 	// it depends on where the user clicks we got the event on the span or the li element.
 	$('#board').on('click', 'span', function(event) {
@@ -203,6 +215,7 @@ function addListeners() {
 	})
 }
 
+// formats seconds to mm:ss
 // method taken from https://stackoverflow.com/a/17781037
 function formatSeconds(seconds)
 {
@@ -211,26 +224,31 @@ function formatSeconds(seconds)
     return date.toTimeString().replace(/.*(\d{2}:\d{2}).*/, "$1");
 }
 
+// calculates the number of seconds from initTime to now
 function getSeconds() {
 	var currentTime = new Date().getTime();
 	var seconds = (currentTime - initTime) / 1000;
 	return seconds;	
 }
 
+// updates timer with current seconds, every second
 function updateTimer() {
 	var formatedTime = formatSeconds(getSeconds());
 	$('#timer').text(formatedTime);
 	timerTimeOut = setTimeout(updateTimer, 1000);
 }
 
+// stops timer
 function stopTimer() {
 	clearTimeout(timerTimeOut);
 }
 
+// shows timer, starting its update loop
 function showTimer() {
 	updateTimer();
 }
 
+// init variables for a new game
 function initCounters() {
 	openedCard = null;
 	movesCounter = 0;
@@ -239,17 +257,27 @@ function initCounters() {
 	initTime = new Date().getTime();
 }
 
+// init variables for a new game and updates user interface for moves
 function resetCounters() {
 	initCounters();
 	$('#counter').text(movesCounter);
 }
 
+// stops timer and stars a new one
+function resetTimer() {
+	stopTimer();
+	updateTimer();
+}
+
+// resets game elements: board, stars, counters, timer
 function restartGame() {
 	resetBoard();
 	resetStars();
 	resetCounters();
+	resetTimer();
 }
 
+// inits a new game
 function initGame() {
 	createBoard();
 	createStars();
