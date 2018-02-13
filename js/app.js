@@ -85,6 +85,8 @@ var movesCounter;
 var pairsToMatch;
 var initTime;
 
+var timerTimeOut;
+
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
@@ -116,6 +118,8 @@ function addMachedPair() {
 		if (confirm("Congratulations!!! You have win with " + movesCounter + " movements in " + formatedTime + ". You're a " + starsString + " player!!" + 
 			"\nDo you want to play again?")) {
 			restartGame();
+		} else {
+			stopTimer();
 		}
 	}
 }
@@ -216,7 +220,11 @@ function getSeconds() {
 function updateTimer() {
 	var formatedTime = formatSeconds(getSeconds());
 	$('#timer').text(formatedTime);
-	setTimeout(updateTimer, 1000);
+	timerTimeOut = setTimeout(updateTimer, 1000);
+}
+
+function stopTimer() {
+	clearTimeout(timerTimeOut);
 }
 
 function showTimer() {
